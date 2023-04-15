@@ -15,7 +15,7 @@ connection.connect((err) => {
   const createUserTable = () => {
     const query = `
       CREATE TABLE IF NOT EXISTS users (
-        userid VARCHAR(255) NOT NULL,
+        userid INT AUTO_INCREMENT PRIMARY KEY,
         password VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
@@ -25,22 +25,22 @@ connection.connect((err) => {
       console.log('Users table created!');
     });
   };
-  const alterUserTable = () => {
-    const query = `
-      DROP TABLE users
-    `;
-    connection.query(query, (err, result) => {
-      if (err) throw err;
-      console.log('Table altered!');
-    });
-  };
+//   const alterUserTable = () => {
+//     const query = `
+//       DROP TABLE users
+//     `;
+//     connection.query(query, (err, result) => {
+//       if (err) throw err;
+//       console.log('Table altered!');
+//     });
+//   };
   const createEventTable = () => {
     const query = `
       CREATE TABLE IF NOT EXISTS event (
+        eventid INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(255) NOT NULL,
         category VARCHAR(255) NOT NULL,
-        eventid VARCHAR(255) NOT NULL,
         contactemail VARCHAR(255) NOT NULL,
         time VARCHAR(255) NOT NULL,
         date VARCHAR(255) NOT NULL,
@@ -55,11 +55,13 @@ connection.connect((err) => {
     const createCommentTable = () => {
         const query = `
           CREATE TABLE IF NOT EXISTS comment (
-            commentid VARCHAR(255) NOT NULL,
+            commentid INT AUTO_INCREMENT PRIMARY KEY,
             author VARCHAR(255) NOT NULL,
             content VARCHAR(255) NOT NULL,
             time VARCHAR(255) NOT NULL,
-            date VARCHAR(255) NOT NULL
+            date VARCHAR(255) NOT NULL,
+            foreign_key_col INT,
+            FOREIGN KEY (foreign_key_col) REFERENCES users(userid)
           )
         `;
     connection.query(query, (err, result) => {
@@ -70,7 +72,7 @@ connection.connect((err) => {
   const createRSOTable = () => {
     const query = `
       CREATE TABLE IF NOT EXISTS rso (
-        rsoid VARCHAR(255) NOT NULL,
+        rsoid INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL
       )
     `;
@@ -82,7 +84,7 @@ connection.query(query, (err, result) => {
 const createUniProfileTable = () => {
     const query = `
       CREATE TABLE IF NOT EXISTS uniProfile (
-        uniid VARCHAR(255) NOT NULL,
+        uniid INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         description VARCHAR(255) NOT NULL,
         num_students VARCHAR(255) NOT NULL,
@@ -97,8 +99,8 @@ connection.query(query, (err, result) => {
 const createLocationTable = () => {
     const query = `
       CREATE TABLE IF NOT EXISTS location (
+        name VARCHAR(255) PRIMARY KEY,
         address VARCHAR(255) NOT NULL,
-        name VARCHAR(255) NOT NULL,
         latitude VARCHAR(255) NOT NULL,
         longitude VARCHAR(255) NOT NULL
       )

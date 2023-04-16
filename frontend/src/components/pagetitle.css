@@ -1,0 +1,9 @@
+
+h1{
+	display: flex;
+	flex-direction: column;
+	font-size: 40px;
+	color: white;
+	text-align: center;
+	margin-top: 50px;
+}

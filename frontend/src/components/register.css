@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css?family=Inter:400");
+
+html {background-color: #51715c}
+
+.mainbutton{
+    display: block;
+    margin-left: auto;
+	margin-right: auto;
+    height: 40px;
+    width: 200px;
+    background-color: #b9e4c8;
+    border-color: black;
+    font-size: 20px;
+    margin-top: 4%;
+    margin-bottom: 6%;
+    justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.dropbutton{
+    display: block;
+	margin-left: auto;
+	margin-right: auto;
+    height: 40px;
+    width: 200px;
+    background-color: #b9e4c8;
+    border-color: black;
+    font-size: 20px;
+    margin-top: 25px;
+    justify-content: center;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+
+.registerBox{
+	position: relative;
+    background-color: #ffffff;
+    height: 320px;
+    width: 300px;
+    justify-content: center;
+    margin-bottom: auto;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, .5);
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    font-size: 36px;
+    min-width: 122px;
+    text-align: center;
+    margin-top: 20%;
+    padding-top: 8%;
+}
+
+.sub-title{
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    min-width: 122px;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.input{
+	height: 35px;
+	width: 200px;
+	background-color: #F7F7F7;
+	border-radius: 5px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	display: flex;
+    	flex-direction: column;
+	justify-content: center;
+	font-size: 18px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.error{
+	color: red;
+	justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.buffer{
+	position: block;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}

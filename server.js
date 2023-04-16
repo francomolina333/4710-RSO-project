@@ -17,7 +17,7 @@ connection.connect((err) => {
       CREATE TABLE IF NOT EXISTS users (
         userid INT AUTO_INCREMENT PRIMARY KEY,
         password VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        userlevel VARCHAR(255) NOT NULL
       )
     `;
     connection.query(query, (err, result) => {
@@ -25,15 +25,7 @@ connection.connect((err) => {
       console.log('Users table created!');
     });
   };
-//   const alterUserTable = () => {
-//     const query = `
-//       DROP TABLE users
-//     `;
-//     connection.query(query, (err, result) => {
-//       if (err) throw err;
-//       console.log('Table altered!');
-//     });
-//   };
+
   const createEventTable = () => {
     const query = `
       CREATE TABLE IF NOT EXISTS event (
@@ -45,8 +37,15 @@ connection.connect((err) => {
         time VARCHAR(255) NOT NULL,
         date VARCHAR(255) NOT NULL,
         description VARCHAR(255) NOT NULL,
+        eventtype VARCHAR(255) NOT NULL,
         foreign_locationid VARCHAR(255),
-        FOREIGN KEY (foreign_locationid) REFERENCES location(name)
+        FOREIGN KEY (foreign_locationid) REFERENCES location(name),
+        foreign_userid INT,
+        FOREIGN KEY (foreign_userid) REFERENCES users(userid),
+        foreign_rsoid INT,
+        FOREIGN KEY (foreign_rsoid) REFERENCES rso(rsoid),
+        foreign_uniid INT,
+        FOREIGN KEY (foreign_uniid) REFERENCES uniProfile(uniid)
       )
     `;
     connection.query(query, (err, result) => {
@@ -77,7 +76,9 @@ connection.connect((err) => {
     const query = `
       CREATE TABLE IF NOT EXISTS rso (
         rsoid INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL
+        name VARCHAR(255) NOT NULL,
+        foreign_userid INT,
+        FOREIGN KEY (foreign_userid) REFERENCES users(userid)
       )
     `;
 connection.query(query, (err, result) => {

@@ -44,7 +44,9 @@ connection.connect((err) => {
         contactemail VARCHAR(255) NOT NULL,
         time VARCHAR(255) NOT NULL,
         date VARCHAR(255) NOT NULL,
-        description VARCHAR(255) NOT NULL
+        description VARCHAR(255) NOT NULL,
+        foreign_locationid VARCHAR(255),
+        FOREIGN KEY (foreign_locationid) REFERENCES location(name)
       )
     `;
     connection.query(query, (err, result) => {
@@ -60,8 +62,10 @@ connection.connect((err) => {
             content VARCHAR(255) NOT NULL,
             time VARCHAR(255) NOT NULL,
             date VARCHAR(255) NOT NULL,
-            foreign_key_col INT,
-            FOREIGN KEY (foreign_key_col) REFERENCES users(userid)
+            foreign_userid INT,
+            FOREIGN KEY (foreign_userid) REFERENCES users(userid),
+            foreign_eventid INT,
+            FOREIGN KEY (foreign_eventid) REFERENCES event(eventid)
           )
         `;
     connection.query(query, (err, result) => {
@@ -88,7 +92,9 @@ const createUniProfileTable = () => {
         name VARCHAR(255) NOT NULL,
         description VARCHAR(255) NOT NULL,
         num_students VARCHAR(255) NOT NULL,
-        pictures VARCHAR(255) NOT NULL
+        pictures VARCHAR(255) NOT NULL,
+        foreign_locationid VARCHAR(255),
+        FOREIGN KEY (foreign_locationid) REFERENCES location(name)
       )
     `;
 connection.query(query, (err, result) => {

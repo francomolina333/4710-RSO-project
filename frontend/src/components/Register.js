@@ -4,20 +4,19 @@ function Register()
 {
     function buildPath(route)
     {
-   
         return 'http://localhost:3000/' + route;
     }
 
-    var userid;
+    var email;
     var password;
-
+    
     const [message,setMessage] = useState('');
 
     const doRegister = async event => 
     {
         event.preventDefault();
 
-        var obj = {userid:userid.value,password:password.value};
+        var obj = {email:email.value,password:password.value};
         var js = JSON.stringify(obj);
 
         try
@@ -33,7 +32,7 @@ function Register()
             }
             else
             {
-                var user = {userID:res.userID}
+                var user = {userid:res.userid, email:email}
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
@@ -56,16 +55,17 @@ function Register()
         <div>
             <form onSubmit={doRegister} className="registerBox">
                 <span className="title">Sign up</span>
-                <input type="text" id="loginName" placeholder="User ID" className="input"
-                    ref={(c) => userid = c} />
+                <input type="text" placeholder="Email" className="input"
+                    ref={(c) => email = c} />
 
-                <input type="password" id="loginPassword" placeholder="Password" className="input"
+                <input type="password" placeholder="Password" className="input"
                     ref={(c) => password = c} />
 
-                <div id="bumper" className="buffer"><span id="registerResult" className = "error">{message}</span></div> 
+                <div className="buffer"><span className = "error">{message}</span></div> 
 
                 <input type="submit" id="registerButton" value = "Register" className="mainbutton"
                 onClick={doRegister} />
+                
             </form>
 
             <input type="button" className="dropbutton" value="Login" 

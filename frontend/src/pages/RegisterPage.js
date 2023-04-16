@@ -7,7 +7,7 @@ const RegisterPage = () =>
 {
 
     return(
-      <div className="main-container">
+      <div>
         <PageTitle />
         <Register />
       </div>

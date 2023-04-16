@@ -8,7 +8,7 @@ function Login()
         return 'http://localhost:3000/' + route;
     }
 
-    var userid;
+    var email;
     var password;
 
     const [message,setMessage] = useState('');
@@ -17,7 +17,7 @@ function Login()
     {
         event.preventDefault();
 
-        var obj = {userid:userid.value,password:password.value};
+        var obj = {email:email.value,password:password.value};
         var js = JSON.stringify(obj);
 
         try
@@ -33,7 +33,7 @@ function Login()
             }
             else
             {
-                var user = {userID:res.userID}
+                var user = {userid:res.userid, email:email}
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
@@ -55,20 +55,20 @@ const goRegister = async event=>
     return(
         <div>
             <form onSubmit={doLogin} className="loginBox">
-                <span id="inner-title" className="title">Log In</span>
-                <input type="text" id="loginName" placeholder="User ID" className="input"
-                    ref={(c) => userid = c} />
+                <span className="title">Log In</span>
+                <input type="text" placeholder="Email" className="input"
+                    ref={(c) => email = c} />
 
-                <input type="password" id="loginPassword" placeholder="Password" className="input"
+                <input type="password" placeholder="Password" className="input"
                     ref={(c) => password = c} />
 
-                <div id="bumper" className="buffer"><span id="loginResult" className = "error">{message}</span></div> 
+                <div className="buffer"><span className = "error">{message}</span></div> 
 
-                <input type="submit" id="loginButton" className="mainbutton" value ="Log In"
+                <input type="submit" className="mainbutton" value ="Log In"
                     onClick={doLogin} />
             </form>
 
-        <input type="button" id="registerButton" className="dropbutton" value="Register" 
+        <input type="button" className="dropbutton" value="Register" 
                 onClick={goRegister}/>           
      </div>
     );

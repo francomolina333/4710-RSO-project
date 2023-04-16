@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'test1'
+    database: 'test2'
 });
 
 connection.connect((err) => {
@@ -37,6 +37,8 @@ connection.connect((err) => {
         time VARCHAR(255) NOT NULL,
         date VARCHAR(255) NOT NULL,
         description VARCHAR(255) NOT NULL,
+        avgratings FLOAT,
+        numratings INT,
         eventtype VARCHAR(255) NOT NULL,
         foreign_locationid VARCHAR(255),
         FOREIGN KEY (foreign_locationid) REFERENCES location(name),
@@ -117,12 +119,29 @@ connection.query(query, (err, result) => {
   console.log('Location table created!');
 });
 };
+const createRatingTable = () => {
+  const query = `
+    CREATE TABLE IF NOT EXISTS rating (
+      ratingid INT AUTO_INCREMENT PRIMARY KEY,
+      rating INT,
+      foreign_userid INT,
+      FOREIGN KEY (foreign_userid) REFERENCES users(userid),
+      foreign_eventid INT,
+      FOREIGN KEY (foreign_eventid) REFERENCES event(eventid)
+    )
+  `;
+connection.query(query, (err, result) => {
+if (err) throw err;
+console.log('Ratings table created!');
+});
+};
 
   createUserTable();
-  createEventTable();
-  createCommentTable();
+  createLocationTable();
   createRSOTable();
   createUniProfileTable();
-  createLocationTable();
+  createEventTable();
+  createRatingTable();
+  createCommentTable();
 
 });

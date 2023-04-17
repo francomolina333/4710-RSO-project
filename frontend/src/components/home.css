@@ -1,8 +1,15 @@
-@import url("https://fonts.googleapis.com/css?family=Inter:400");
+.homediv{
+    position: relative;
+    background-color: #51715c;
+    height: 320px;
+    width: 300px;
+    justify-content: center;
+    margin-top: 40px;
+    margin-right: auto;
+    margin-left: auto;
+}
 
-html {background-color: #51715c}
-
-.mainbutton{
+.homebutton{
     display: block;
     margin-left: auto;
 	margin-right: auto;
@@ -20,32 +27,6 @@ html {background-color: #51715c}
     cursor: pointer;
 }
 
-.dropbutton{
-    display: block;
-	margin-left: auto;
-	margin-right: auto;
-    height: 40px;
-    width: 200px;
-    background-color: #b9e4c8;
-    border-color: black;
-    font-size: 20px;
-    margin-top: 0px;
-    justify-content: center;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-}
-
-
-.loginBox{
-	position: relative;
-    background-color: #cde5d5;
-    height: 320px;
-    width: 300px;
-    justify-content: center;
-    margin-right: auto;
-    margin-left: auto;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, .5);
-}
 
 .title{
     display: flex;
@@ -54,7 +35,6 @@ html {background-color: #51715c}
     min-width: 122px;
     text-align: center;
     margin-top: 20%;
-    margin-bottom: 30px;
     padding-top: 8%;
 }
 

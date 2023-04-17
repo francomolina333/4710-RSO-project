@@ -38,7 +38,7 @@ html {background-color: #51715c}
 
 .registerBox{
 	position: relative;
-    background-color: #ffffff;
+    background-color: #cde5d5;
     height: 320px;
     width: 300px;
     justify-content: center;
@@ -54,6 +54,7 @@ html {background-color: #51715c}
     font-size: 36px;
     min-width: 122px;
     text-align: center;
+    margin-bottom: 30px;
     margin-top: 20%;
     padding-top: 8%;
 }

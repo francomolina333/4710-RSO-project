@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginPage from './pages/LoginPage';
 import RegisterPage from'./pages/RegisterPage';
+import HomePage from './pages/HomePage';
+import JoinRSOPage from './pages/JoinRSOPage';
+import AddUniversityPage from './pages/AddUniversityPage';
 
 function App() {
   return (
@@ -13,6 +16,9 @@ function App() {
       <Route path="/" index element={<LoginPage />} />
       <Route path="/login" index element={<LoginPage />} />
       <Route path="/register" index element={<RegisterPage />} />
+      <Route path="/home" index element={<HomePage />} />
+      <Route path="/join-RSO" index element={<JoinRSOPage />} />
+      <Route path="/add-university" index element={<AddUniversityPage />} />
     </Routes>
   </BrowserRouter>
 );

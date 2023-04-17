@@ -2,17 +2,17 @@ import React from 'react';
 
 import PageTitle from '../components/PageTitle';
 import Navbar from '../components/Navbar';
-import JoinRSO from '../components/JoinRSO';
+import CreateRSO from '../components/CreateRSO';
 
-const JoinRSOPage = () =>
+const CreateRSOPage = () =>
 {
     return(
       <div>
         <PageTitle />
         <Navbar />
-        <JoinRSO />
+        <CreateRSO />
       </div>
     );
 };
 
-export default JoinRSOPage;
+export default CreateRSOPage;

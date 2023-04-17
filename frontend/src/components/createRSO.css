@@ -1,0 +1,29 @@
+.createBox{
+	position: relative;
+    background-color: #cde5d5;
+    height: 410px;
+    width: 300px;
+    justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, .5);
+}
+
+.joinTitle{
+    display: flex;
+    flex-direction: column;
+    font-size: 36px;
+    min-width: 122px;
+    text-align: center;
+    margin-top: 10%;
+    margin-bottom: 10px;
+    padding-top: 8%;
+}
+
+.joinSubtitle{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    min-width: 122px;
+    margin-left: 48px;
+}

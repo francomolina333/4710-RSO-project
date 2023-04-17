@@ -8,6 +8,7 @@ import RegisterPage from'./pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import JoinRSOPage from './pages/JoinRSOPage';
 import AddUniversityPage from './pages/AddUniversityPage';
+import CreateRSOPage from './pages/CreateRSOPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/home" index element={<HomePage />} />
       <Route path="/join-RSO" index element={<JoinRSOPage />} />
       <Route path="/add-university" index element={<AddUniversityPage />} />
+      <Route path='/create-RSO' index element={<CreateRSOPage />} />
     </Routes>
   </BrowserRouter>
 );

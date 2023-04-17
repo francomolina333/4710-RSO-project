@@ -19,7 +19,7 @@ import './addUniversity.css';
 // } from "@reach/combobox";
 // import "@reach/combobox/styles.css";
 
-{/* <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBUb9BPPLQ_5r4e02SlBEybzp8fs6jF4wI"></script> */}
+{/* <script src="//maps.googleapis.com/maps/api/js?key=YOUR_KEY"></script> */}
  
 const libraries = ["places"];
 

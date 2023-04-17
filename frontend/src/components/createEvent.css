@@ -1,0 +1,16 @@
+.createEventBox{
+	position: relative;
+    background-color: #cde5d5;
+    height: 590px;
+    width: 300px;
+    justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, .5);
+}
+
+.radioContainer{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}

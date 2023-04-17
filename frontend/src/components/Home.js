@@ -17,6 +17,11 @@ function Home()
         window.location.href = '/add-university';
     }
 
+    const goCreateEvent = async event=>
+    {
+        window.location.href = '/create-event';
+    }
+
     return(
 		<body>
             <div className="homediv">
@@ -24,8 +29,11 @@ function Home()
                     onClick={goJoin}/>   
                 <input type="button" className="homebutton" value="Create New RSO" 
                     onClick={goCreateRSO}/>
+                <input type="button" className="homebutton" value="Create Event" 
+                    onClick={goCreateEvent}/>  
                 <input type="button" className="homebutton" value="Add University" 
                     onClick={goAddUniversity}/>  
+                
             </div>
 	    </body>
    );

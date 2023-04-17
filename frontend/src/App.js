@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import JoinRSOPage from './pages/JoinRSOPage';
 import AddUniversityPage from './pages/AddUniversityPage';
 import CreateRSOPage from './pages/CreateRSOPage';
+import CreateEventPage from './pages/CreateEventPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/join-RSO" index element={<JoinRSOPage />} />
       <Route path="/add-university" index element={<AddUniversityPage />} />
       <Route path='/create-RSO' index element={<CreateRSOPage />} />
+      <Route path='/create-event' index element={<CreateEventPage />} />
     </Routes>
   </BrowserRouter>
 );

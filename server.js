@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'test2'
+    database: 'rso'
 });
 
 connection.connect((err) => {
@@ -16,6 +16,7 @@ connection.connect((err) => {
     const query = `
       CREATE TABLE IF NOT EXISTS users (
         userid INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
         userlevel VARCHAR(255) NOT NULL
       )

@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso' 
+    database: 'rso4' 
 });
 
 connection.connect((err) => {
@@ -213,7 +213,7 @@ app.put('/api/joinUni', (req, res) => {
 });
 
 app.post('/api/createRSO', (req, res) => {
-  const { newRSOid, name, userid, emails } = req.body;
+  const { name, userid, emails } = req.body;
   var error = '';
   var ret;
   var IDs = [];
@@ -223,92 +223,79 @@ app.post('/api/createRSO', (req, res) => {
   connection.query(checkUniqueQuery, [name], (err, results, fields) => {
     if (err) {
       console.error('Error checking for rso: ' + err.stack);
-      res.status(500).send('Error checking for rso');
       error = err.sqlMessage;
       ret = {error:error};
-      res.status(200).json(ret);
-      return;
+      return res.status(500).json(ret); // exit the entire function and return a 500 error response
     }
 
     if (results.length > 0) {
-      //res.status(409).send('RSO already exists');
       error = 'RSO already exists';
       ret = {error:error};
-      res.status(200).json(ret);
-      return;
+      return res.status(409).json(ret); // exit the entire function and return a 409 conflict response
     }
-  })
 
-    const createRSOQuery = 'INSERT INTO rso (rsoid, name, foreign_userid) VALUES (?, ?, ?)';
-
-    connection.query(createRSOQuery, [newRSOid, name, userid], (err, results, fields) => {
-      if (err) {
-        console.error('Error creating rso: ' + err.stack);
-        //res.status(500).send('Error creating uni');
-        error = err.sqlMessage;
-        ret = {error:error};
-        res.status(200).json(ret);
-        return;
-      }
-
-      //res.status(201).send('RSO created successfully');
-      console.log("RSO created sucessfully");
-    })
-
-      const findIDsQuery = 'SELECT userid FROM users WHERE email = ?';
-
-      for (var i = 0; i < 4; i++)
-      {
-        connection.query(findIDsQuery, [emails[i]], (err, results, fields) => {
-          if (err) {
-            console.error('Error finding IDs' + err.stack);
-            //res.status(500).send('Error creating uni');
-            error = err.sqlMessage;
-            ret = {error:error};
-            res.status(200).json(ret);
-            return;
-          }
-
-          console.log("Results: " + results);
-          console.log("Results[i]: " + results[i]);
-          
-          IDs[i] = results[i].userid;
-
-          //res.status(201).send('RSO created successfully');
-          console.log("IDs found successfully");
-    })};
-      
-    const addMembersQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
+    const createRSOQuery = 'INSERT INTO rso ( name, foreign_userid) VALUES (?, ?)';
 
     connection.query(createRSOQuery, [name, userid], (err, results, fields) => {
       if (err) {
         console.error('Error creating rso: ' + err.stack);
-        //res.status(500).send('Error creating uni');
         error = err.sqlMessage;
         ret = {error:error};
-        res.status(200).json(ret);
-        return;
+        return res.status(500).json(ret);
       }
 
-      //res.status(201).send('RSO created successfully');
       console.log("RSO created sucessfully");
 
-    })
+      // const findIDsQuery = 'SELECT userid FROM users WHERE email = ?';
+      // var memberid = [];
+      // for (var i = 0; i <= 4; i++)
+      // {
+      //   connection.query(findIDsQuery, [emails[i]], (err, results, fields) => {
+      //     if (err) {
+      //       console.error('Error finding IDs' + err.stack);
+      //       return res.status(500).json({ error: err.sqlMessage });
+      //     }
+      //     memberid[i] = parseInt(results[i].userid);
+      //     console.log(memberid[i]);
+      //   });
+      // }
+      // const findRSOid = 'SELECT rsoid FROM rso WHERE name = ?';
+      // const addMembersQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
+      // var rsoid;
+      // connection.query(findRSOid, [name], (err, results, fields) => {
+      //   if (err) {
+      //     console.error('Error finding RSoid: ' + err.stack);
+      //     return res.status(500).json({ error: err.sqlMessage });
+      //   }
+      //   rsoid = parseInt(results[0].rsoid);
+      //   console.log(rsoid);
+      // });
 
-      const adminQuery = 'UPDATE users SET userlevel = ? WHERE userid = ?';
+      // connection.query(addMembersQuery, [rsoid, ], (err, results, fields) => {
+      //   if (err) {
+      //     console.error('Error adding member: ' + err.stack);
+      //     return res.status(500).json({ error: err.sqlMessage });
+      //   }
 
-      connection.query(adminQuery, ['admin', userid], (err, results, fields) => {
-        if (err) {
-          console.error('Error creating admin: ' + err.stack);
-          //res.status(500).send('Error creating uni');
-          error = err.sqlMessage;
-          ret = {error:error};
-          res.status(200).json(ret);
-          return;
-        }
-        console.log("Admin created successfully");
-      });
+      //   console.log("Member added successfully");
+
+        const adminQuery = 'UPDATE users SET userlevel = ? WHERE userid = ?';
+
+        connection.query(adminQuery, ['admin', userid], (err, results, fields) => {
+          if (err) {
+            console.error('Error creating admin: ' + err.stack);
+            return res.status(500).json({ error: err.sqlMessage });
+          }
+          
+          console.log("Admin created successfully");
+
+          return res.status(201).send('RSO created successfully');
+        });
+      // });
+    });
+  });
 });
+
 
 
 // app.get('/login', (req, res) => {});

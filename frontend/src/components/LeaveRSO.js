@@ -8,7 +8,8 @@ function LeaveRSO()
         return 'http://localhost:3000/' + route;
     }
 
-    var user_data = localStorage.getItem('user_data');
+    var user_data = JSON.parse(localStorage.getItem('user_data'));
+    var userid = user_data.userid;
     var rsoid;
 
     const [message,setMessage] = useState('');
@@ -17,13 +18,13 @@ function LeaveRSO()
     {
         event.preventDefault();
 
-        var obj = {rsoid:rsoid.value, userid:user_data.userid.value};
+        var obj = {rsoid:rsoid.value, userid:userid};
         var js = JSON.stringify(obj);
 
         try
         {    
             const response = await fetch(buildPath('api/leaveRSO'),
-                {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+                {method:'PUT',body:js,headers:{'Content-Type': 'application/json'}});
 
             var res = JSON.parse(await response.text());
 

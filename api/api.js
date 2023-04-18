@@ -348,6 +348,37 @@ app.put('/api/joinRSO', (req, res) => {
   });
 })
 
+app.put('/api/leaveRSO', (req, res) => {
+  const { rsoid, userid} = req.body;
+
+  var error = '';
+
+  const checkExistsQuery = 'SELECT * FROM rsomembers WHERE rsoid = ? AND foreign_userid = ?';
+  connection.query(checkExistsQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for rso: ' + err.stack);
+      res.status(500).send('Error checking for rso');
+      error = err.sqlMessage;
+      ret = {error:error};
+    }
+    if (results.length == 0) {
+      //res.status(409).send('RSO already exists');
+      error = "You aren't in this RSO";
+      ret = {error:error};
+    }
+    })
+
+    const leaveQuery = 'DELETE FROM rsomembers WHERE rsoid = ? AND foreign_userid = ?';
+    connection.query(leaveQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      error = err.sqlMessage;
+    }
+
+    var ret = {userid:userid, error:error};
+    res.status(200).json(ret);
+    
+  });
+})
 
 // app.get('/login', (req, res) => {});
 // app.get('/login', (req, res) => {});

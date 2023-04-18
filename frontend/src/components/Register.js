@@ -10,14 +10,38 @@ function Register()
 
     var emailInput = '';
     var passwordInput = '';
+    var newID = '';
     
     const [message,setMessage] = useState('');
 
     const doRegister = async event => 
     {
         event.preventDefault();
+        try
+        {    
+            const response = await fetch(buildPath('api/generateID'),
+                {method:'GET',body:js,headers:{'Content-Type': 'application/json'}});
+
+            var res = JSON.parse(await response.text());
+
+            if( res.error !== "")
+            {
+                setMessage(res.error);
+                console.log(res.error);
+            }
+            else
+            {
+                newID=res.newID;
+            }
+        }
+        catch(e)
+        {
+            alert(e.toString());
+            console.log("error caught");
+            return;
+        }    
         
-        var obj = {password:passwordInput.value, email:emailInput.value};
+        var obj = {newID:newID, password:passwordInput.value, email:emailInput.value};
         var js = JSON.stringify(obj);
         console.log(js);
 

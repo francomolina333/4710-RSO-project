@@ -8,7 +8,8 @@ function CreateRSO()
         return 'http://localhost:3000/' + route;
     }
 
-    var user_data = localStorage.getItem('user_data');
+    var user_data = JSON.parse(localStorage.getItem('user_data'));
+    var userid = user_data.userid;
     var rsoName;
     const emails = [];
 
@@ -18,7 +19,7 @@ function CreateRSO()
     {
         event.preventDefault();
 
-        var obj = {foreign_userid:user_data.userid.value, name:rsoName.value, emails:emails};
+        var obj = {foreign_userid:userid, name:rsoName.value, emails:emails};
         var js = JSON.stringify(obj);
 
         try

@@ -33,11 +33,34 @@ app.use((req, res, next) =>
   next();
 });
 
-app.post('/api/register', (req, res) => {
-    const { password, email } = req.body;
+app.get('/api/generateID', async (req, res) => {
+  const { password, email } = req.body;
+
+  var error = '';
+  var newID;
+
+
+  const query = `SELECT * FROM users`;
+  connection.query(query, [], (err, results, fields) => {
+      if (err) {
+          error = err.sqlMessage;
+      }
+
+      newID = results.length + 1;
+      console.log(newID);
+      //console.log('User registered with id ' + results.userid);
+      //res.send('User registered successfully');
+
+      var ret = {error:error, newID:newID};
+      res.status(200).json(ret);
+  });
+});
+
+app.post('/api/register', async (req, res) => {
+    const { newID, password, email } = req.body;
 
     var error = '';
-    var newid = 0;
+
 
     // Do something with the name and email
     // here you write sql to CREATE this user in DB
@@ -61,7 +84,7 @@ app.post('/api/register', (req, res) => {
 
     const userlevel = "Student";
     const query = `INSERT INTO users (userid, userlevel, password, email) VALUES (?, ?, ?, ?)`;
-    connection.query(query, [newid, userlevel, password, email], (err, results, fields) => {
+    connection.query(query, [newID, userlevel, password, email], (err, results, fields) => {
         if (err) {
             error = err.sqlMessage;
         }
@@ -100,12 +123,16 @@ app.post('/api/createUni', (req, res) => {
   const { name, description, address, userlevel } = req.body;
   var error = '';
   var ret;
-  //if (userlevel !== "superadmin") {
-  //  res.status(401).send('You are not authorized to access this resource');
-  //  return;
-  //}
+  if (userlevel !== "superadmin") {
+   //res.status(401).send('You are not authorized to access this resource');
 
-  const uniQuery = `SELECT * FROM uniprofile WHERE name = ?`;
+   error = "You are not authorized to add a university";
+    ret = {error:error};
+    res.status(200).json(ret);
+   return;
+  }
+
+  const uniQuery = 'SELECT * FROM uniprofile WHERE name = ?';
 
   connection.query(uniQuery, [name], (err, results, fields) => {
     if (err) {
@@ -125,9 +152,9 @@ app.post('/api/createUni', (req, res) => {
       return;
     }
 
-    const insertQuery = `INSERT INTO uniprofile (name, description, address, num_students) VALUES (?, ?, ?, ?)`;
+    const insertQuery = 'INSERT INTO uniprofile (name, description, address, num_students) VALUES (?, ?, ?, ?)';
 
-    connection.query(insertQuery, [name, description, address, 0], (err, results, fields) => {
+    connection.query(insertQuery, [name, description, address, num_students="0"], (err, results, fields) => {
       if (err) {
         console.error('Error creating uni: ' + err.stack);
         //res.status(500).send('Error creating uni');
@@ -162,6 +189,101 @@ app.put('/api/joinUni', (req, res) => {
     
 });
 
+app.post('/api/createRSO', (req, res) => {
+  const { name, userid, emails } = req.body;
+  var error = '';
+  var ret;
+  var IDs = [];
+
+  const checkUniqueQuery = 'SELECT * FROM rso WHERE name = ?';
+
+  connection.query(checkUniqueQuery, [name], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for rso: ' + err.stack);
+      res.status(500).send('Error checking for rso');
+      error = err.sqlMessage;
+      ret = {error:error};
+      res.status(200).json(ret);
+      return;
+    }
+
+    if (results.length > 0) {
+      //res.status(409).send('RSO already exists');
+      error = 'RSO already exists';
+      ret = {error:error};
+      res.status(200).json(ret);
+      return;
+    }
+  })
+
+    const createRSOQuery = 'INSERT INTO rso (rsoid, name, foreign_userid) VALUES (?, ?)';
+
+    connection.query(createRSOQuery, [newRSOid, name, userid], (err, results, fields) => {
+      if (err) {
+        console.error('Error creating rso: ' + err.stack);
+        //res.status(500).send('Error creating uni');
+        error = err.sqlMessage;
+        ret = {error:error};
+        res.status(200).json(ret);
+        return;
+      }
+
+      //res.status(201).send('RSO created successfully');
+      console.log("RSO created sucessfully");
+    })
+
+      const findIDsQuery = 'SELECT userid FROM users WHERE email = ?';
+
+      for (var i = 0; i < 4; i++)
+      {
+        connection.query(findIDsQuery, [emails[i]], (err, results, fields) => {
+          if (err) {
+            console.error('Error finding IDs' + err.stack);
+            //res.status(500).send('Error creating uni');
+            error = err.sqlMessage;
+            ret = {error:error};
+            res.status(200).json(ret);
+            return;
+          }
+          
+          IDs[i] = results[i].userid;
+
+          //res.status(201).send('RSO created successfully');
+          console.log("IDs found successfully");
+    })};
+      
+    const addMembersQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
+
+    connection.query(createRSOQuery, [name, userid], (err, results, fields) => {
+      if (err) {
+        console.error('Error creating rso: ' + err.stack);
+        //res.status(500).send('Error creating uni');
+        error = err.sqlMessage;
+        ret = {error:error};
+        res.status(200).json(ret);
+        return;
+      }
+
+      //res.status(201).send('RSO created successfully');
+      console.log("RSO created sucessfully");
+
+    })
+
+      const adminQuery = 'UPDATE users SET userlevel = ? WHERE userid = ?';
+
+      connection.query(adminQuery, ['admin', userid], (err, results, fields) => {
+        if (err) {
+          console.error('Error creating admin: ' + err.stack);
+          //res.status(500).send('Error creating uni');
+          error = err.sqlMessage;
+          ret = {error:error};
+          res.status(200).json(ret);
+          return;
+        }
+        console.log("Admin created successfully");
+      });
+});
+
 
 // app.get('/login', (req, res) => {});
 // app.get('/login', (req, res) => {});
@@ -174,4 +296,4 @@ var server = app.listen(3000, function () {
    var port = server.address().port
    
    console.log("Example app listening at http://%s:%s", host, port)
-})
+});

@@ -21,3 +21,33 @@
 #next{
     margin-left: 25%;
 }
+
+table{
+    margin-top: 20px;
+    background-color:rgb(204, 220, 206);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: black;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+tr{
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid;
+}
+li{
+    margin-top:auto;
+    margin-bottom: auto;
+    margin-left:20px;
+    margin-right: 20px;
+    text-decoration: none;
+    list-style-type: none;
+}

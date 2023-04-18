@@ -91,59 +91,36 @@ function Events()
 		numEvents = events.length;
         console.log(events);
 
-        if(numEvents == 0){	//if no recipes, display this message
+        if(numEvents == 0){	//if no events, display this message
 				document.getElementById("defaultMsg").style.display = "block";
 				document.getElementById("defaultMsg").style.visibility = "visible";
 			}
 
-			else{		//else, load list of recipes to choose from
+			else{		//else, load list of events to choose from
 				let listSize = 0;
 				let pageCount = 0;
 				let mainDiv = document.createElement("table");
                 mainDiv.className = "listTable";
 				this.document.getElementById("eventsDiv").appendChild(mainDiv);
-				for(let i = 0; i < numEvents /*&& i < 10*/; i++){		//append a listItem per recipe listing
-																	//max of 10 recipes per page, if more load to next page
+				for(let i = 0; i < numEvents; i++){		
                 eventid = events[i]["id"];
 					let listItem = document.createElement("tr");
-						listItem.className = "recipeBox";
-						//listItem.onclick = goView(eventid);			//goes to specified recipe on click, probably needs a function
-					let recipeTitle = document.createElement("div");
-						recipeTitle.className = "recipeTitle";
-					let recipeDescription = document.createElement("div");
-						recipeDescription.className = "recipeDescription";
-					/*let recipeTags = document.createElement("div");
-						recipeTags.className = "recipeTags";*/
-					/*let editBTN = this.document.createElement("button");
-						editBTN.type = "button";
-						editBTN.className = "editButton";
-						editBTN.innerHTML = "Edit";*/
-						//editBTN.onclick = goEdit(eventid);
-					let title = events[i]["recipe"];				//place title here
-					let dscrp = events[i]["text_recipe"];		//place description here
-					//let tags = "Recipe Tags";				//place tags here. If tags are an array, maybe add the array 
-															         //here and loop to list all elements in a comma separated-list
-					recipeTitle.innerHTML = title;			//I will add overflow prevention to all of these later on.
-					recipeTitle.onclick = goView(eventid);
-                    recipeDescription.innerHTML = dscrp;
-					//recipeTags.innerHTML = "Tags: " + tags;
-					//append all created items into list
+						listItem.className = "eventBox";
+					let eventTitle = document.createElement("div");
+						eventTitle.className = "eventTitle";
+					let eventDescription = document.createElement("div");
+						eventDescription.className = "eventDescription";
+	
+					let title = events[i]["event"];				
+					let dscrp = events[i]["text_event"];		
+					eventTitle.innerHTML = title;			
+					eventTitle.onclick = goView(eventid);
+                    eventDescription.innerHTML = dscrp;
+		
 					mainDiv.appendChild(listItem);
-					listItem.appendChild(recipeTitle);
-                    //listItem.appendChild(editBTN);
-					listItem.appendChild(recipeDescription);
-					//listItem.appendChild(recipeTags);
+					listItem.appendChild(eventTitle);
+					listItem.appendChild(eventDescription);
 					listSize++;
-					/*if(listSize == 10){
-						listSize = 0;
-						this.document.getElementById("next").style.display = "block";
-						this.document.getElementById("next").style.visibility = "visible";
-					}
-					/*make the "previous" button visible when scrolling to next page(s)
-					if(pageCount > 1){
-						this.document.getElementById("previous").style.display = "block";
-						this.document.getElementById("previous").style.visibility = "visible";
-					}*/
 				}
 			}
 		}
@@ -155,7 +132,45 @@ function Events()
 		<body className="eventscontainer">
          <p id="title"  className="eventstitle">Events</p>
 			<div id="eventsDiv" className="displayregion">
-				<p id="defaultMsg" className="defaultMsg">There are no upcoming events.</p>
+            <table>
+               <tr>
+                  <li>Yoga</li>
+                  <li>Join us for a yoga class</li>
+                  <li>5:30 pm</li>
+                  <li>April 19, 2023</li>
+               </tr>
+               <tr>
+                  <li>Market Day</li>
+                  <li>Showcase services and products</li>
+                  <li>11:00 am</li>
+                  <li>April 20, 2023</li>
+               </tr>
+               <tr>
+                  <li>Summer Research Academy</li>
+                  <li>For students beginning research in Summer</li>
+                  <li>12:00 pm</li>
+                  <li>June 1, 2023</li>
+               </tr>
+               <tr>
+                  <li>Pilates</li>
+                  <li>Join us for a pilates class</li>
+                  <li>5:30 pm</li>
+                  <li>June 2, 2023</li>
+               </tr>
+               <tr>
+                  <li>Vendor Day</li>
+                  <li>Showcase your business</li>
+                  <li>10:00 am</li>
+                  <li>June 4, 2023</li>
+               </tr>
+               <tr>
+                  <li>Advanced Research Academy</li>
+                  <li>For students beginning advanced research</li>
+                  <li>12:00 pm</li>
+                  <li>June 5, 2023</li>
+               </tr>
+            </table>
+				<p id="defaultMsg" className="defaultMsg">There are no more upcoming events.</p>
 			</div>
 			<div>
 				<button type="button" id="previous" className="previousButton"  onClick={previousPage()}>Previous Page</button>

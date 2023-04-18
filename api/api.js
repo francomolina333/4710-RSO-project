@@ -236,7 +236,7 @@ app.post('/api/createRSO', (req, res) => {
 
     const createRSOQuery = 'INSERT INTO rso ( name, foreign_userid) VALUES (?, ?)';
 
-    connection.query(createRSOQuery, [name, userid], (err, results, fields) => {
+    connection.query(createRSOQuery, [newRSOid, userid], (err, results, fields) => {
       if (err) {
         console.error('Error creating rso: ' + err.stack);
         error = err.sqlMessage;
@@ -296,6 +296,75 @@ app.post('/api/createRSO', (req, res) => {
   });
 });
 
+app.put('/api/joinRSO', (req, res) => {
+  const { rsoid, userid} = req.body;
+
+  var error = '';
+
+  const checkExistsQuery = 'SELECT * FROM rso WHERE rsoid = ?';
+  connection.query(checkExistsQuery, [rsoid], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for rso: ' + err.stack);
+      res.status(500).send('Error checking for rso');
+      error = err.sqlMessage;
+      ret = {error:error};
+      res.status(200).json(ret);
+      return;
+    }
+    if (results.length == 0) {
+      //res.status(409).send('RSO already exists');
+      error = 'RSO not found';
+      ret = {error:error};
+      res.status(200).json(ret);
+      return;
+    }
+    })
+
+    const joinQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
+    connection.query(joinQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      error = err.sqlMessage;
+    }
+    else if (results.length == 0) {
+      error = 'RSO Not found';
+    }
+    var ret = {userid:userid, error:error};
+    res.status(200).json(ret);
+    
+  });
+})
+
+app.put('/api/leaveRSO', (req, res) => {
+  const { rsoid, userid} = req.body;
+
+  var error = '';
+
+  const checkExistsQuery = 'SELECT * FROM rsomembers WHERE rsoid = ? AND foreign_userid = ?';
+  connection.query(checkExistsQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for rso: ' + err.stack);
+      res.status(500).send('Error checking for rso');
+      error = err.sqlMessage;
+      ret = {error:error};
+    }
+    if (results.length == 0) {
+      //res.status(409).send('RSO already exists');
+      error = "You aren't in this RSO";
+      ret = {error:error};
+    }
+    })
+
+    const leaveQuery = 'DELETE FROM rsomembers WHERE rsoid = ? AND foreign_userid = ?';
+    connection.query(leaveQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      error = err.sqlMessage;
+    }
+
+    var ret = {userid:userid, error:error};
+    res.status(200).json(ret);
+    
+  });
+})
 
 
 // app.get('/login', (req, res) => {});

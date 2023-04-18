@@ -27,7 +27,20 @@ app.post('/register', (req, res) => {
     // dboperations.registerUser().then(result => {
     //     res.send(`User ${email} created successfully`);
     // })
+    const emailQuery = `SELECT * FROM users WHERE email = ?`;
+    connection.query(emailQuery, [email], (err, results, fields) => {
+        if (err) {
+            console.error('Error checking for email: ' + err.stack);
+            res.status(500).send('Error checking for email');
+            return;
+        }
 
+        if (results.length > 0) {
+            // Email already exists in the database, return an error
+            res.status(409).send('Email already exists');
+            return;
+        }
+    });
     const query = `INSERT INTO users (userlevel, password, email) VALUES (?, ?, ?)`;
     connection.query(query, [userlevel, password, email], (err, results, fields) => {
         if (err) {

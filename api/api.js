@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso2'
+    database: 'rso3'
 });
 
 connection.connect((err) => {
@@ -27,8 +27,8 @@ app.post('/register', (req, res) => {
     // dboperations.registerUser().then(result => {
     //     res.send(`User ${email} created successfully`);
     // })
-const emailQuery = `SELECT * FROM users WHERE email = ?`;
-connection.query(emailQuery, [email], (err, results, fields) => {
+    const emailQuery = `SELECT * FROM users WHERE email = ?`;
+    connection.query(emailQuery, [email], (err, results, fields) => {
     if (err) {
         console.error('Error checking for email: ' + err.stack);
         return res.status(500).send('Error checking for email');
@@ -101,26 +101,63 @@ app.post('/createUni', (req, res) => {
         res.status(201).send('Uni created successfully');
       });
     });
-  });
+});
   
-  app.put('/joinUni', (req, res) => {
+app.put('/joinUni', (req, res) => {
     const { uniid, userid } = req.body;
-  
+
     // Construct the SQL statement to update the user's email
     const sql = `UPDATE users SET uniid = ? WHERE userid = ?`;
-  
+
     // Execute the SQL statement with the provided parameters
     connection.query(sql, [uniid, userid], (err, result) => {
         if (err) {
-          console.error(err);
-          res.status(500).send('Failed to update uniid');
+            console.error(err);
+            res.status(500).send('Failed to update uniid');
         } else {
-          console.log(`Updated uni for user ${userid} to ${uniid}`);
-          res.send(`Updated uni for user ${userid} to ${uniid}`);
+            console.log(`Updated uni for user ${userid} to ${uniid}`);
+            res.send(`Updated uni for user ${userid} to ${uniid}`);
+            const q = `UPDATE uniprofile SET num_students = num_students + 1 WHERE uniid = ?`;
+            connection.query(q, [uniid], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Failed to update num_students');
+                } else {
+                    console.log(`Updated num_students for uni ${uniid}`);
+                    //res.status(409).send(`Updated num_students for uni ${uniid}`);
+                }
+            });
         }
-      });
-      
-  });
+    });
+
+    //Handle non-MySQL errors
+    process.on('uncaughtException', (err) => {
+        console.error(`Caught exception: ${err}`);
+        res.status(500).send(`Caught exception: ${err}`);
+    });
+});
+
+// app.get('/loadUni', (req, res) => {
+//     const { uniid } = req.body;
+//     connection.query('SELECT * FROM uniprofile WHERE uniid = ?', [uniid], (error, results, fields) => {
+//         if (error) {
+//             res.status(500).send('Internal Server Error');
+//         } else if (results.length === 0) {
+//             res.status(404).send('University not found');
+//         } else {
+//             const uniProfile = results[0];
+//             res.status(200).json({
+//                 uniid: uniProfile.uniid,
+//                 name: uniProfile.name,
+//                 location: uniProfile.location,
+//                 ranking: uniProfile.ranking,
+//                 // Add any other attributes you want to return here
+//             });
+//         }
+//     });
+// });
+
+
 
 
 // app.get('/createUniProfile', (req, res) => {});

@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso1'
+    database: 'rso2'
 });
 
 connection.connect((err) => {
@@ -108,7 +108,7 @@ connection.connect((err) => {
           uniid INT AUTO_INCREMENT PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
           description VARCHAR(255) NOT NULL,
-          num_students VARCHAR(255) NOT NULL,
+          num_students INT,
           address VARCHAR(255)
         )
       `;

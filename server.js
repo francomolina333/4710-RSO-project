@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso'
+    database: 'rso2'
 });
 
 connection.connect((err) => {
@@ -18,7 +18,8 @@ connection.connect((err) => {
         userid INT AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
-        userlevel VARCHAR(255) NOT NULL
+        userlevel VARCHAR(255) NOT NULL,
+        uniid INT
       )
     `;
     connection.query(query, (err, result) => {
@@ -41,8 +42,7 @@ connection.connect((err) => {
         avgratings FLOAT,
         numratings INT,
         eventtype VARCHAR(255) NOT NULL,
-        foreign_locationid VARCHAR(255),
-        FOREIGN KEY (foreign_locationid) REFERENCES location(name),
+        address VARCHAR(255),
         foreign_userid INT,
         FOREIGN KEY (foreign_userid) REFERENCES users(userid),
         foreign_rsoid INT,
@@ -70,76 +70,88 @@ connection.connect((err) => {
             FOREIGN KEY (foreign_eventid) REFERENCES event(eventid)
           )
         `;
-    connection.query(query, (err, result) => {
-      if (err) throw err;
-      console.log('Comment table created!');
-    });
+        connection.query(query, (err, result) => {
+          if (err) throw err;
+            console.log('Comment table created!');
+        });
+    };
+    const createRSOTable = () => {
+      const query = `
+        CREATE TABLE IF NOT EXISTS rso (
+          rsoid INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          foreign_userid INT,
+          FOREIGN KEY (foreign_userid) REFERENCES users(userid)
+        )
+      `;
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    console.log('RSO table created!');
+  });
   };
-  const createRSOTable = () => {
+  const createRSOmembers = () => {
     const query = `
-      CREATE TABLE IF NOT EXISTS rso (
-        rsoid INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
+      CREATE TABLE IF NOT EXISTS rsomembers (
+        rsoid INT NOT NULL,
         foreign_userid INT,
         FOREIGN KEY (foreign_userid) REFERENCES users(userid)
       )
     `;
-connection.query(query, (err, result) => {
+  connection.query(query, (err, result) => {
   if (err) throw err;
-  console.log('RSO table created!');
-});
-};
-const createUniProfileTable = () => {
+  console.log('RSOmembers table created!');
+  });
+  };
+  const createUniProfileTable = () => {
+      const query = `
+        CREATE TABLE IF NOT EXISTS uniProfile (
+          uniid INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          description VARCHAR(255) NOT NULL,
+          num_students INT,
+          address VARCHAR(255)
+        )
+      `;
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    console.log('Uni_Profile table created!');
+  });
+  };
+  const createLocationTable = () => {
+      const query = `
+        CREATE TABLE IF NOT EXISTS location (
+          name VARCHAR(255) PRIMARY KEY,
+          address VARCHAR(255) NOT NULL,
+          latitude VARCHAR(255) NOT NULL,
+          longitude VARCHAR(255) NOT NULL
+        )
+      `;
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    console.log('Location table created!');
+  });
+  };
+  const createRatingTable = () => {
     const query = `
-      CREATE TABLE IF NOT EXISTS uniProfile (
-        uniid INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        description VARCHAR(255) NOT NULL,
-        num_students VARCHAR(255) NOT NULL,
-        pictures VARCHAR(255) NOT NULL,
-        foreign_locationid VARCHAR(255),
-        FOREIGN KEY (foreign_locationid) REFERENCES location(name)
+      CREATE TABLE IF NOT EXISTS rating (
+        ratingid INT AUTO_INCREMENT PRIMARY KEY,
+        rating INT,
+        foreign_userid INT,
+        FOREIGN KEY (foreign_userid) REFERENCES users(userid),
+        foreign_eventid INT,
+        FOREIGN KEY (foreign_eventid) REFERENCES event(eventid)
       )
     `;
-connection.query(query, (err, result) => {
-  if (err) throw err;
-  console.log('Uni_Profile table created!');
-});
-};
-const createLocationTable = () => {
-    const query = `
-      CREATE TABLE IF NOT EXISTS location (
-        name VARCHAR(255) PRIMARY KEY,
-        address VARCHAR(255) NOT NULL,
-        latitude VARCHAR(255) NOT NULL,
-        longitude VARCHAR(255) NOT NULL
-      )
-    `;
-connection.query(query, (err, result) => {
-  if (err) throw err;
-  console.log('Location table created!');
-});
-};
-const createRatingTable = () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS rating (
-      ratingid INT AUTO_INCREMENT PRIMARY KEY,
-      rating INT,
-      foreign_userid INT,
-      FOREIGN KEY (foreign_userid) REFERENCES users(userid),
-      foreign_eventid INT,
-      FOREIGN KEY (foreign_eventid) REFERENCES event(eventid)
-    )
-  `;
-connection.query(query, (err, result) => {
-if (err) throw err;
-console.log('Ratings table created!');
-});
-};
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    console.log('Ratings table created!');
+  });
+  };
 
   createUserTable();
   createLocationTable();
   createRSOTable();
+  createRSOmembers();
   createUniProfileTable();
   createEventTable();
   createRatingTable();

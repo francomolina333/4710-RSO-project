@@ -90,6 +90,63 @@ app.get('/login', (req, res) => {
       }
     });
 })
+
+app.post('/createUni', (req, res) => {
+  const { name, description, address, userlevel } = req.body;
+
+  if (userlevel !== "superadmin") {
+    res.status(401).send('You are not authorized to access this resource');
+    return;
+  }
+
+  const uniQuery = `SELECT * FROM uniprofile WHERE name = ?`;
+
+  connection.query(uniQuery, [name], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for uni: ' + err.stack);
+      res.status(500).send('Error checking for uni');
+      return;
+    }
+
+    if (results.length > 0) {
+      res.status(409).send('Uni already exists');
+      return;
+    }
+
+    const insertQuery = `INSERT INTO uniprofile (name, description, address, num_students) VALUES (?, ?, ?, ?)`;
+
+    connection.query(insertQuery, [name, description, address, 0], (err, results, fields) => {
+      if (err) {
+        console.error('Error creating uni: ' + err.stack);
+        res.status(500).send('Error creating uni');
+        return;
+      }
+
+      res.status(201).send('Uni created successfully');
+    });
+  });
+});
+
+app.put('/joinUni', (req, res) => {
+  const { uniid, userid } = req.body;
+
+  // Construct the SQL statement to update the user's email
+  const sql = `UPDATE users SET uniid = ? WHERE userid = ?`;
+
+  // Execute the SQL statement with the provided parameters
+  connection.query(sql, [uniid, userid], (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Failed to update uniid');
+      } else {
+        console.log(`Updated uni for user ${userid} to ${uniid}`);
+        res.send(`Updated uni for user ${userid} to ${uniid}`);
+      }
+    });
+    
+});
+
+
 // app.get('/login', (req, res) => {});
 // app.get('/login', (req, res) => {});
 // app.get('/login', (req, res) => {});

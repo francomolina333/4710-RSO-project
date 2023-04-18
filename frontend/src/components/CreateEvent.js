@@ -8,8 +8,9 @@ function CreateEvent()
         return 'http://localhost:3000/' + route;
     }
 
-    var user_data = localStorage.getItem('user_data');
-    var rsoName;
+    var user_data = JSON.parse(localStorage.getItem('user_data'));
+    var userid = user_data.userid;
+    var eventName;
     var category;
     var description;
     var time;
@@ -17,22 +18,48 @@ function CreateEvent()
     var address;
     var phone;
     var email;
+    var rsoid;
+    var newID;
 
     const [message,setMessage] = useState('');
 
     const doCreateEvent = async event => 
     {
         event.preventDefault();
+        try
+        {    
+            const response = await fetch(buildPath('api/generateEventID'),
+                {method:'GET',body:js,headers:{'Content-Type': 'application/json'}});
 
-        var obj = {foreign_userid:user_data.userid.value, name:rsoName.value, category:category.value,
+            var res = JSON.parse(await response.text());
+
+            if( res.error !== "")
+            {
+                setMessage(res.error);
+                console.log(res.error);
+            }
+            else
+            {
+                newID=res.newID;
+            }
+        }
+        catch(e)
+        {
+            alert(e.toString());
+            console.log("error caught");
+            return;
+        }   
+
+        var obj = {eventid:newID,foreign_userid:userid, foreign_rsoid:rsoid.value, name:eventName.value, category:category.value,
                     description: description.value, time:time.value, date:date.value, address:address.value,
                     phone:phone.value, email:email.value, eventtype:type};
+        console.log(obj);
         var js = JSON.stringify(obj);
 
         try
         {    
             const response = await fetch(buildPath('api/createEvent'),
-                {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+                {method:'PUT',body:js,headers:{'Content-Type': 'application/json'}});
 
             var res = JSON.parse(await response.text());
 
@@ -62,8 +89,8 @@ function CreateEvent()
         <div>
             <form onSubmit={doCreateEvent} className="createEventBox">
                 <span className="joinTitle">Create Event</span>
-                <input type="text" placeholder="RSO Name" className="input"
-                    ref={(c) => rsoName = c} />
+                <input type="text" placeholder="Event Name" className="input"
+                    ref={(c) => eventName = c} />
                 
                 <input type="text" placeholder="Event category" className="input"
                     ref={(c) => category = c} />
@@ -97,6 +124,8 @@ function CreateEvent()
                     <label for="public">RSO</label>
                 </div>
                 
+                <input type="text" placeholder="RSO ID (Optional)" className="input"
+                    ref={(c) => rsoid = c} />
 
                 <div className="buffer"><span className = "error">{message}</span></div> 
 

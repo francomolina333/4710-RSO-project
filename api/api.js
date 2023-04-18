@@ -78,6 +78,28 @@ app.get('/api/generateRSOID', async (req, res) => {
   });
 });
 
+app.get('/api/generateEventID', async (req, res) => {
+
+  var error = '';
+  var newID;
+
+
+  const query = `SELECT * FROM event`;
+  connection.query(query, [], (err, results, fields) => {
+      if (err) {
+          error = err.sqlMessage;
+      }
+
+      newID = results.length + 1;
+      console.log(newID);
+      //console.log('User registered with id ' + results.userid);
+      //res.send('User registered successfully');
+
+      var ret = {error:error, newID:newID};
+      res.status(200).json(ret);
+  });
+});
+
 
 app.post('/api/register', async (req, res) => {
     const { newID, password, email } = req.body;
@@ -374,6 +396,100 @@ app.put('/api/leaveRSO', (req, res) => {
       error = err.sqlMessage;
     }
 
+    var ret = {userid:userid, error:error};
+    res.status(200).json(ret);
+    
+  });
+})
+
+app.put('/api/createEvent', (req, res) => {
+  const { eventid, foreign_userid, foreign_rsoid, name, category,
+    description, time, date, address,
+    phone, email, eventtype } = req.body;
+
+  var error = '';
+  var userlevel ='';
+
+  const checkPrivilegesQuery = 'SELECT userlevel FROM users WHERE userid = ?';
+  connection.query(checkPrivilegesQuery, [foreign_userid], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for privileges: ' + err.stack);
+      res.status(500).send('Error checking for privileges');
+      error = err.sqlMessage;
+      ret = {error:error};
+      // res.status(200).json(ret);
+      // return;
+    }
+    else
+    {
+      userlevel = results[0].userlevel;
+    }
+  });
+
+
+  if(eventtype=="Public")
+  {
+    if (userlevel != "Super admin")
+    {
+      error = "You must be a super admin to create public events.";
+      ret = {error:error};
+      // res.status(200).json(ret);
+      // return;
+    }
+  }
+  else if(eventtype == "Private")
+  {
+    error = "Universities are broken";
+    ret = {error:error};
+    // res.status(200).json(ret);
+    // return;
+  }
+  else if(eventtype == "RSO")
+  {
+    const checkExistsQuery = 'SELECT * FROM rso WHERE rsoid = ?';
+    connection.query(checkExistsQuery, [foreign_rsoid], (err, results, fields) => {
+      if (err) {
+        console.error('Error checking for rso: ' + err.stack);
+        res.status(500).send('Error checking for rso');
+        error = err.sqlMessage;
+        ret = {error:error};
+        // res.status(200).json(ret);
+        // return;
+      }
+      if (results.length == 0) {
+        error = 'RSO not found';
+        ret = {error:error};
+        // res.status(200).json(ret);
+        // return;
+      }
+      })
+
+      const addRSOEventQuery = 'INSERT INTO event (eventid, foreign_userid, foreign_rsoid, name, category, phone, email, eventtype) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      connection.query(addRSOEventQuery, [eventid, foreign_userid, foreign_rsoid, name, category, phone, email, eventtype], (err, results, fields) => {
+      if (err) {
+        console.error('Error creating event: ' + err.stack);
+        res.status(500).send('Error creating event');
+        error = err.sqlMessage;
+        ret = {error:error};
+        // res.status(200).json(ret);
+        // return;
+      }
+      else console.log("Successfully created event");
+        var ret = {eventid:eventid, error:error};
+        res.status(200).json(ret);
+      })
+
+  }
+  
+
+    const joinQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
+    connection.query(joinQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      error = err.sqlMessage;
+    }
+    else if (results.length == 0) {
+      error = 'RSO Not found';
+    }
     var ret = {userid:userid, error:error};
     res.status(200).json(ret);
     

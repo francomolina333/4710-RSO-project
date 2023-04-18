@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso3'
+    database: 'rso' 
 });
 
 connection.connect((err) => {
@@ -87,21 +87,23 @@ app.post('/api/login', (req, res) => {
       }
       else if (results.length > 0) {
         error = '';
+        var userid = results[0].userid;
       } else {
         error = "User not found";
       }
-      var ret = {userid: results[0].userid, error:error};
+      var ret = {userid:userid, error:error};
       res.status(200).json(ret);
     });
 })
 
-app.post('/createUni', (req, res) => {
+app.post('/api/createUni', (req, res) => {
   const { name, description, address, userlevel } = req.body;
-
-  if (userlevel !== "superadmin") {
-    res.status(401).send('You are not authorized to access this resource');
-    return;
-  }
+  var error = '';
+  var ret;
+  //if (userlevel !== "superadmin") {
+  //  res.status(401).send('You are not authorized to access this resource');
+  //  return;
+  //}
 
   const uniQuery = `SELECT * FROM uniprofile WHERE name = ?`;
 
@@ -109,11 +111,17 @@ app.post('/createUni', (req, res) => {
     if (err) {
       console.error('Error checking for uni: ' + err.stack);
       res.status(500).send('Error checking for uni');
+      error = err.sqlMessage;
+      ret = {error:error};
+      res.status(200).json(ret);
       return;
     }
 
     if (results.length > 0) {
       res.status(409).send('Uni already exists');
+      error = 'University already exists';
+      ret = {error:error};
+      res.status(200).json(ret);
       return;
     }
 
@@ -122,7 +130,10 @@ app.post('/createUni', (req, res) => {
     connection.query(insertQuery, [name, description, address, 0], (err, results, fields) => {
       if (err) {
         console.error('Error creating uni: ' + err.stack);
-        res.status(500).send('Error creating uni');
+        //res.status(500).send('Error creating uni');
+        error = err.sqlMessage;
+        ret = {error:error};
+        res.status(200).json(ret);
         return;
       }
 
@@ -131,21 +142,22 @@ app.post('/createUni', (req, res) => {
   });
 });
 
-app.put('/joinUni', (req, res) => {
+app.put('/api/joinUni', (req, res) => {
   const { uniid, userid } = req.body;
-
+  var error = '';
   // Construct the SQL statement to update the user's email
   const sql = `UPDATE users SET uniid = ? WHERE userid = ?`;
 
   // Execute the SQL statement with the provided parameters
   connection.query(sql, [uniid, userid], (err, result) => {
       if (err) {
-        console.error(err);
-        res.status(500).send('Failed to update uniid');
+        error = err.sqlMessage;
       } else {
         console.log(`Updated uni for user ${userid} to ${uniid}`);
         res.send(`Updated uni for user ${userid} to ${uniid}`);
       }
+      var ret = {error:error};
+      res.status(200).json(ret);
     });
     
 });

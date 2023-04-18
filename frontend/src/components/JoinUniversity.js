@@ -11,7 +11,8 @@ function JoinUniversity()
         return 'http://localhost:3000/' + route;
     }
 
-    var user_data = localStorage.getItem('user_data');
+    var user_data = JSON.parse(localStorage.getItem('user_data'));
+    var userid = user_data.userid;
     var uniid;
     var name;
     var description;
@@ -23,13 +24,13 @@ function JoinUniversity()
     {
         event.preventDefault();
 
-        var obj = {userid:user_data.userid.value, uniid: uniid};
+        var obj = {uniid:uniid.value, userid:userid};
         var js = JSON.stringify(obj);
 
         try
         {    
-            const response = await fetch(buildPath('api/addUniversity'),
-                {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(buildPath('api/joinUni'),
+                {method:'PUT',body:js,headers:{'Content-Type': 'application/json'}});
 
             var res = JSON.parse(await response.text());
 
@@ -40,6 +41,7 @@ function JoinUniversity()
             else
             {
                 setMessage('Success');
+                console.log("Success");
             }
         }
         catch(e)

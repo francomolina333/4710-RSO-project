@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso'
+    database: 'rso1'
 });
 
 connection.connect((err) => {
@@ -18,7 +18,8 @@ connection.connect((err) => {
         userid INT AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
-        userlevel VARCHAR(255) NOT NULL
+        userlevel VARCHAR(255) NOT NULL,
+        uniid INT
       )
     `;
     connection.query(query, (err, result) => {
@@ -41,8 +42,7 @@ connection.connect((err) => {
         avgratings FLOAT,
         numratings INT,
         eventtype VARCHAR(255) NOT NULL,
-        foreign_locationid VARCHAR(255),
-        FOREIGN KEY (foreign_locationid) REFERENCES location(name),
+        address VARCHAR(255),
         foreign_userid INT,
         FOREIGN KEY (foreign_userid) REFERENCES users(userid),
         foreign_rsoid INT,
@@ -109,9 +109,7 @@ connection.connect((err) => {
           name VARCHAR(255) NOT NULL,
           description VARCHAR(255) NOT NULL,
           num_students VARCHAR(255) NOT NULL,
-          pictures VARCHAR(255) NOT NULL,
-          foreign_locationid VARCHAR(255),
-          FOREIGN KEY (foreign_locationid) REFERENCES location(name)
+          address VARCHAR(255)
         )
       `;
   connection.query(query, (err, result) => {

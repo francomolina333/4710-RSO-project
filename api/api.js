@@ -56,6 +56,29 @@ app.get('/api/generateID', async (req, res) => {
   });
 });
 
+app.get('/api/generateRSOID', async (req, res) => {
+
+  var error = '';
+  var newID;
+
+
+  const query = `SELECT * FROM rso`;
+  connection.query(query, (err, results, fields) => {
+      if (err) {
+          error = err.sqlMessage;
+      }
+
+      newID = results.length + 1;
+      console.log(newID);
+      //console.log('User registered with id ' + results.userid);
+      //res.send('User registered successfully');
+
+      var ret = {error:error, newID:newID};
+      res.status(200).json(ret);
+  });
+});
+
+
 app.post('/api/register', async (req, res) => {
     const { newID, password, email } = req.body;
 
@@ -190,7 +213,7 @@ app.put('/api/joinUni', (req, res) => {
 });
 
 app.post('/api/createRSO', (req, res) => {
-  const { name, userid, emails } = req.body;
+  const { newRSOid, name, userid, emails } = req.body;
   var error = '';
   var ret;
   var IDs = [];
@@ -216,7 +239,7 @@ app.post('/api/createRSO', (req, res) => {
     }
   })
 
-    const createRSOQuery = 'INSERT INTO rso (rsoid, name, foreign_userid) VALUES (?, ?)';
+    const createRSOQuery = 'INSERT INTO rso (rsoid, name, foreign_userid) VALUES (?, ?, ?)';
 
     connection.query(createRSOQuery, [newRSOid, name, userid], (err, results, fields) => {
       if (err) {
@@ -245,6 +268,9 @@ app.post('/api/createRSO', (req, res) => {
             res.status(200).json(ret);
             return;
           }
+
+          console.log("Results: " + results);
+          console.log("Results[i]: " + results[i]);
           
           IDs[i] = results[i].userid;
 

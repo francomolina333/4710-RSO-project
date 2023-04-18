@@ -11,6 +11,7 @@ function CreateRSO()
     var user_data = JSON.parse(localStorage.getItem('user_data'));
     var userid = user_data.userid;
     var rsoName;
+    var newID;
     const emails = [];
 
     const [message,setMessage] = useState('');
@@ -18,8 +19,37 @@ function CreateRSO()
     const doCreateRSO = async event => 
     {
         event.preventDefault();
+        try
+        {    
+            const response = await fetch(buildPath('api/generateRSOID'),
+                {method:'GET',body:js,headers:{'Content-Type': 'application/json'}});
 
-        var obj = {foreign_userid:userid, name:rsoName.value, emails:emails};
+            var res = JSON.parse(await response.text());
+
+            if( res.error !== "")
+            {
+                setMessage(res.error);
+                console.log(res.error);
+            }
+            else
+            {
+                newID=res.newID;
+            }
+        }
+        catch(e)
+        {
+            alert(e.toString());
+            console.log("error caught");
+            return;
+        }   
+
+
+        for (var i = 0; i <4; i++)
+        {
+            emails[i] = emails[i].value;
+        }
+
+        var obj = {newRSOid: newID, foreign_userid:userid, name:rsoName.value, emails:emails};
         var js = JSON.stringify(obj);
 
         try

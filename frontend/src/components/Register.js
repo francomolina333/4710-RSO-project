@@ -7,17 +7,18 @@ function Register()
         return 'http://localhost:3000/' + route;
     }
 
-    var email;
-    var password;
+    var emailInput = '';
+    var passwordInput = '';
     
     const [message,setMessage] = useState('');
 
     const doRegister = async event => 
     {
         event.preventDefault();
-
-        var obj = {email:email.value,password:password.value};
+        
+        var obj = {password:passwordInput.value, email:emailInput.value};
         var js = JSON.stringify(obj);
+        console.log(js);
 
         try
         {    
@@ -29,19 +30,19 @@ function Register()
             if( res.error !== "")
             {
                 setMessage(res.error);
+                console.log(res.error);
             }
             else
             {
-                var user = {userid:res.userid, email:email}
-                localStorage.setItem('user_data', JSON.stringify(user));
-
                 setMessage('');
                 window.location.href = '/login';
+                console.log("Success");
             }
         }
         catch(e)
         {
             alert(e.toString());
+            console.log("error caught");
             return;
         }    
     };
@@ -56,10 +57,10 @@ function Register()
             <form onSubmit={doRegister} className="registerBox">
                 <span className="title">Sign up</span>
                 <input type="text" placeholder="Email" className="input"
-                    ref={(c) => email = c} />
+                    ref={(c) => emailInput = c} />
 
                 <input type="password" placeholder="Password" className="input"
-                    ref={(c) => password = c} />
+                    ref={(c) => passwordInput = c} />
 
                 <div className="buffer"><span className = "error">{message}</span></div> 
 

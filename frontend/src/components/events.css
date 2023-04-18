@@ -1,0 +1,23 @@
+.eventscontainer{
+    display:flex;
+    flex-direction:column;
+    text-align:center;
+    justify-content: center;
+}
+
+.eventstitle{
+    color: white;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    padding-top: 0;
+    font-size: 24px;
+}
+
+#previous{
+    margin-right: 25%;
+}
+
+#next{
+    margin-left: 25%;
+}

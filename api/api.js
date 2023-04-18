@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso'
+    database: 'rso3'
 });
 
 connection.connect((err) => {
@@ -55,7 +55,8 @@ app.post('/api/register', (req, res) => {
     if (results.length > 0) {
       // Email already exists in the database, return an error
       var ret = {error:"Email already exists"};
-      return res.status(200).json(ret);
+      res.status(200).json(ret);
+      return;
     }
 
     const userlevel = "Student";

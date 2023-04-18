@@ -55,7 +55,7 @@ app.post('/api/register', (req, res) => {
     if (results.length > 0) {
       // Email already exists in the database, return an error
       var ret = {error:"Email already exists"};
-      res.status(200).json(ret);
+      return res.status(200).json(ret);
     }
 
     const userlevel = "Student";
@@ -89,7 +89,7 @@ app.post('/api/login', (req, res) => {
       } else {
         error = "User not found";
       }
-      var ret = {userid: results.userid, error:error};
+      var ret = {userid: results[0].userid, error:error};
       res.status(200).json(ret);
     });
 })

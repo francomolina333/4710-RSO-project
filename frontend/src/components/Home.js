@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './home.css'
 
 function Home()
-{  const goJoin = async event=>
+{  
+    const goJoin = async event=>
     {
         window.location.href = '/join-RSO';
     }
@@ -22,13 +23,17 @@ function Home()
         window.location.href = '/add-university';
     }
 
+    const goJoinUniversity = async event=>
+    {
+        window.location.href = '/join-university';
+    }
+
     const goCreateEvent = async event=>
     {
         window.location.href = '/create-event';
     }
 
     return(
-		<body>
             <div className="homediv">
                 <h1 className="hometitle">Home</h1>
                 <input type="button" className="homebutton" value ="Join RSO"
@@ -38,12 +43,12 @@ function Home()
                 <input type="button" className="homebutton" value="Create New RSO" 
                     onClick={goCreateRSO}/>
                 <input type="button" className="homebutton" value="Create Event" 
-                    onClick={goCreateEvent}/>  
+                    onClick={goCreateEvent}/>
+                <input type="button" className="homebutton" value="Join University" 
+                    onClick={goJoinUniversity}/>  
                 <input type="button" className="homebutton" value="Add University" 
                     onClick={goAddUniversity}/>  
-                
             </div>
-	    </body>
    );
 };
 

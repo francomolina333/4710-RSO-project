@@ -1,0 +1,58 @@
+.joinUniBox{
+	position: relative;
+    background-color: #cde5d5;
+    height: 220px;
+    width: 300px;
+    justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, .5);
+}
+
+.joinTitle{
+    display: flex;
+    flex-direction: column;
+    font-size: 36px;
+    min-width: 122px;
+    text-align: center;
+    margin-top: 10%;
+    margin-bottom: 10px;
+    padding-top: 8%;
+}
+
+.joinSubtitle{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    min-width: 122px;
+    margin-left: 48px;
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 10;
+}
+
+.search input {
+    height: 35px;
+	width: 200px;
+	background-color: #F7F7F7;
+	border-radius: 5px;
+	margin-top: 0px;
+	margin-bottom: 10px;
+	display: flex;
+    	flex-direction: column;
+	justify-content: center;
+	font-size: 18px;
+	margin-right: auto;
+	margin-left: auto;
+}

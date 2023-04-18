@@ -12,6 +12,7 @@ import AddUniversityPage from './pages/AddUniversityPage';
 import CreateRSOPage from './pages/CreateRSOPage';
 import CreateEventPage from './pages/CreateEventPage';
 import EventsPage from './pages/EventsPage';
+import JoinUniversityPage from './pages/JoinUniversityPage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/join-RSO" index element={<JoinRSOPage />} />
       <Route path="/leave-RSO" index element={<LeaveRSOPage />} />
       <Route path="/add-university" index element={<AddUniversityPage />} />
+      <Route path="/join-university" index element={<JoinUniversityPage />} />
       <Route path='/create-RSO' index element={<CreateRSOPage />} />
       <Route path='/create-event' index element={<CreateEventPage />} />
       <Route path='/events' index element={<EventsPage />} />

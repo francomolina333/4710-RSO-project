@@ -75,20 +75,23 @@ app.post('/api/register', (req, res) => {
   });    
 });
 
-app.get('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    console.log(email);
+    var error = '';
 
     // Check if the email and password are valid
-    connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results, fields) => {
-      if (error) throw error;
-      console.log(results);
-      if (results.length > 0) {
-        res.send('Login successful!');
-      } else {
-        res.send('Invalid email or password');
+    connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results, fields) => {
+      if (err) {
+        error = err.sqlMessage;
       }
+      else if (results.length > 0) {
+        error = '';
+      } else {
+        error = "User not found";
+      }
+      var ret = {userid: results.userid, error:error};
+      res.status(200).json(ret);
     });
 })
 

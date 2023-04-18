@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './register.css'
+
 function Register()
 {
     function buildPath(route)

@@ -280,7 +280,7 @@ app.post('/api/createRSO', (req, res) => {
       
     const addMembersQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
 
-    connection.query(createRSOQuery, [name, userid], (err, results, fields) => {
+    connection.query(createRSOQuery, [newRSOid, userid], (err, results, fields) => {
       if (err) {
         console.error('Error creating rso: ' + err.stack);
         //res.status(500).send('Error creating uni');
@@ -309,6 +309,44 @@ app.post('/api/createRSO', (req, res) => {
         console.log("Admin created successfully");
       });
 });
+
+app.put('/api/joinRSO', (req, res) => {
+  const { rsoid, userid} = req.body;
+
+  var error = '';
+
+  const checkExistsQuery = 'SELECT * FROM rso WHERE rsoid = ?';
+  connection.query(checkExistsQuery, [rsoid], (err, results, fields) => {
+    if (err) {
+      console.error('Error checking for rso: ' + err.stack);
+      res.status(500).send('Error checking for rso');
+      error = err.sqlMessage;
+      ret = {error:error};
+      res.status(200).json(ret);
+      return;
+    }
+    if (results.length == 0) {
+      //res.status(409).send('RSO already exists');
+      error = 'RSO not found';
+      ret = {error:error};
+      res.status(200).json(ret);
+      return;
+    }
+    })
+
+    const joinQuery = 'INSERT INTO rsomembers (rsoid, foreign_userid) VALUES (?, ?)';
+    connection.query(joinQuery, [rsoid, userid], (err, results, fields) => {
+    if (err) {
+      error = err.sqlMessage;
+    }
+    else if (results.length == 0) {
+      error = 'RSO Not found';
+    }
+    var ret = {userid:userid, error:error};
+    res.status(200).json(ret);
+    
+  });
+})
 
 
 // app.get('/login', (req, res) => {});

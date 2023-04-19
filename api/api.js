@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'iLoveVu',
-    database: 'rso4' 
+    database: 'rso' 
 });
 
 connection.connect((err) => {
@@ -258,7 +258,7 @@ app.post('/api/createRSO', (req, res) => {
 
     const createRSOQuery = 'INSERT INTO rso ( name, foreign_userid) VALUES (?, ?)';
 
-    connection.query(createRSOQuery, [newRSOid, userid], (err, results, fields) => {
+    connection.query(createRSOQuery, [name, userid], (err, results, fields) => {
       if (err) {
         console.error('Error creating rso: ' + err.stack);
         error = err.sqlMessage;
@@ -311,7 +311,8 @@ app.post('/api/createRSO', (req, res) => {
           
           console.log("Admin created successfully");
 
-          return res.status(201).send('RSO created successfully');
+          //res.status(201).send('RSO created successfully');
+          return;
         });
       // });
     });

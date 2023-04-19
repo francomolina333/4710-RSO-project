@@ -257,7 +257,6 @@ app.post('/api/createRSO', (req, res) => {
     }
 
     const createRSOQuery = 'INSERT INTO rso ( name, foreign_userid) VALUES (?, ?)';
-
     connection.query(createRSOQuery, [name, userid], (err, results, fields) => {
       if (err) {
         console.error('Error creating rso: ' + err.stack);
@@ -300,7 +299,7 @@ app.post('/api/createRSO', (req, res) => {
       //   }
 
       //   console.log("Member added successfully");
-
+      // });
         const adminQuery = 'UPDATE users SET userlevel = ? WHERE userid = ?';
 
         connection.query(adminQuery, ['admin', userid], (err, results, fields) => {

@@ -494,6 +494,24 @@ app.post('/api/createEvent', (req, res) => {
     return res.status(201).send('Event created successfully');
   });
 });
+app.get('/api/getEvent/:eventId', (req, res) => {
+  const eventId = req.params.eventId;
+  const getEventQuery = 'SELECT * FROM event WHERE eventid = ?';
+
+  connection.query(getEventQuery, [eventId], (err, results, fields) => {
+    if (err) {
+      console.error('Error getting event: ' + err.stack);
+      return res.status(500).json({ error: err.sqlMessage });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send('Event not found');
+    }
+
+    console.log("Event retrieved successfully");
+    return res.status(200).json(results[0]);
+  });
+});
 
 // app.get('/login', (req, res) => {});
 // app.get('/login', (req, res) => {});

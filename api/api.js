@@ -480,6 +480,20 @@ app.put('/api/createEvent', (req, res) => {
     
   });
 })
+app.post('/api/createEvent', (req, res) => {
+  const { name, description, date, address, userid, time, contactemail, phone, category, eventType } = req.body;
+  const createEventQuery = 'INSERT INTO event (name, description, date, address, foreign_userid, time, contactemail, phone, category, eventType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+  connection.query(createEventQuery, [name, description, date, address, userid, time, contactemail, phone, category, eventType], (err, results, fields) => {
+    if (err) {
+      console.error('Error creating event: ' + err.stack);
+      return res.status(500).json({ error: err.sqlMessage });
+    }
+
+    console.log("Event created successfully");
+    return res.status(201).send('Event created successfully');
+  });
+});
 
 // app.get('/login', (req, res) => {});
 // app.get('/login', (req, res) => {});
